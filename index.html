@@ -38,29 +38,18 @@
       // way that non-critical warnings and error messages are presented to the
       // user.
       function unityShowBanner(msg, type) {
-        function updateBannerVisibility() {
-          warningBanner.style.display = warningBanner.children.length ? 'block' : 'none';
-        }
-        var div = document.createElement('div');
-        div.innerHTML = msg;
-        warningBanner.appendChild(div);
-        if (type == 'error') div.style = 'background: red; padding: 10px;';
-        else {
-          if (type == 'warning') div.style = 'background: yellow; padding: 10px;';
-          setTimeout(function() {
-            warningBanner.removeChild(div);
-            updateBannerVisibility();
-          }, 5000);
-        }
-        updateBannerVisibility();
+        // Keep Unity messages available for debugging without covering the game UI.
+        if (type === 'error') console.error('[Unity WebGL]', msg);
+        else if (type === 'warning') console.warn('[Unity WebGL]', msg);
+        else console.info('[Unity WebGL]', msg);
       }
 
       var buildUrl = "Build";
       var loaderUrl = buildUrl + "/36c69a970bbbf468f4a412b485f7c710.loader.js";
       var config = {
-        dataUrl: buildUrl + "/04e5315776b65ccbb9163c1ef43e7670.data.br",
+        dataUrl: buildUrl + "/35c150f507f42805eadd151682220c8f.data.br",
         frameworkUrl: buildUrl + "/8f489ea7afbdea0abf62ff07d2fa622b.framework.js.br",
-        codeUrl: buildUrl + "/85e864447f4b158ca56ec38b2ba7e21d.wasm.br",
+        codeUrl: buildUrl + "/26e0976758ce6b404a675799ccedc9ba.wasm.br",
         streamingAssetsUrl: "StreamingAssets",
         companyName: "VulcanTech",
         productName: "Maple Leaf Powershot",
@@ -118,7 +107,7 @@
             unityInstance.SetFullscreen(1);
           };
         }).catch((message) => {
-          alert(message);
+          console.error('[Unity WebGL] Failed to load:', message);
         });
       };
       document.body.appendChild(script);
